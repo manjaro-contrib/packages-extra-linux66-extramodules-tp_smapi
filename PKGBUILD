@@ -16,7 +16,7 @@ _pkgname=tp_smapi
 _kernver="$(cat /usr/lib/modules/${_extraver}/version)"
 _extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
 pkgname=$_linuxprefix-tp_smapi
-pkgver=0.43
+pkgver=0.44
 pkgrel=0.1
 pkgdesc="Modules for ThinkPad's SMAPI functionality"
 arch=('x86_64')
@@ -26,14 +26,14 @@ depends=("$_linuxprefix")
 makedepends=('git' "$_linuxprefix-headers")
 groups=("$_linuxprefix-extramodules")
 install="${_pkgname}.install"
-_commit=0c3398b1acf2a2cabd9cee91dc3fe3d35805fa8b  # tags/tp-smapi/0.43
+_commit=6e80bb1752280bcd142d86ecd0739661bd0e8312  # tags/tp-smapi/0.44
 source=("git+https://github.com/evgeni/tp_smapi#commit=$_commit")
 sha256sums=('SKIP')
 
-#pkgver() {
-#  cd $_pkgname
-#  git describe --tags | sed 's/^tp-smapi\///;s/-/+/g'
-#}
+pkgver() {
+  cd $_pkgname
+  git describe --tags | sed 's/^tp-smapi\///;s/[^-]*-g/r&/;s/-/+/g'
+}
 
 prepare() {
   cd $_pkgname
@@ -53,7 +53,8 @@ package() {
   find . -name "*.ko" -exec install -Dt "$pkgdir$_extramodules" {} +
 
   # compress kernel modules
-  find "${pkgdir}" -name "*.ko" -exec gzip -9 {} +
+  find "$pkgdir" -name "*.ko" -exec strip {} +
+  find "$pkgdir" -name "*.ko" -exec xz {} +
 
   # load module on startup
   echo tp_smapi > "../${_pkgname}.conf"
