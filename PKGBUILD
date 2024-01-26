@@ -57,7 +57,4 @@ package() {
   # load module on startup
   echo tp_smapi > "../${_pkgname}.conf"
   install -Dm 644 "../${_pkgname}.conf" "${pkgdir}/usr/lib/modules-load.d/${pkgname}.conf"
-
-  # update kernel version in install file
-  sed -ri "s#^(extramodules=).*\$#\1${_kernver}/extramodules#" "${startdir}/${_pkgname}.install"
 }
