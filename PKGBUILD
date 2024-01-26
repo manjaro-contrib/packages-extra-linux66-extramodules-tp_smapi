@@ -17,7 +17,7 @@ _kernver="$(cat /usr/src/${_linuxprefix}/version)"
 _extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
 pkgname=$_linuxprefix-tp_smapi
 pkgver=0.44
-pkgrel=38
+pkgrel=39
 pkgdesc="Modules for ThinkPad's SMAPI functionality"
 arch=('x86_64')
 url='https://github.com/evgeni/tp_smapi'
@@ -49,7 +49,7 @@ build() {
 
 package() {
   # install kernel modules
-  find . -name "*.ko" -exec install -Dt "$pkgdir${_kernver}/extramodules" {} +
+  find . -name "*.ko" -exec install -Dt "$pkgdir$_extramodules" {} +
 
   # compress kernel modules
   find "$pkgdir" -name "*.ko" -exec strip {} +
