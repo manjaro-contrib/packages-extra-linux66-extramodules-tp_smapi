@@ -14,6 +14,7 @@ _linuxprefix=linux66
 _extraver=extramodules-6.6-MANJARO
 _pkgname=tp_smapi
 _kernver="$(cat /usr/src/${_linuxprefix}/version)"
+_extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
 pkgname=$_linuxprefix-tp_smapi
 pkgver=0.44
 pkgrel=38
@@ -43,7 +44,7 @@ build() {
 
   # https://bugs.archlinux.org/task/54975 (kernel has no _GLOBAL_OFFSET_TABLE_):
   # Clear EXTRA_CFLAGS since it defaults to injecting CFLAGS and -fno-plt breaks the modules
-  make HDAPS=1 KVER="$(</usr/lib/modules/${_extraver}/version)" EXTRA_CFLAGS=
+  make HDAPS=1 KVER="$_kernver" EXTRA_CFLAGS=
 }
 
 package() {
