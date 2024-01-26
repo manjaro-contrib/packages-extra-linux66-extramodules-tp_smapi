@@ -13,8 +13,7 @@
 _linuxprefix=linux66
 _extraver=extramodules-6.6-MANJARO
 _pkgname=tp_smapi
-_kernver="$(cat /usr/lib/modules/${_extraver}/version)"
-_extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
+_kernver="$(cat /usr/src/${_linuxprefix}/version)"
 pkgname=$_linuxprefix-tp_smapi
 pkgver=0.44
 pkgrel=37
@@ -25,7 +24,6 @@ license=('GPL')
 depends=("$_linuxprefix")
 makedepends=('git' "$_linuxprefix-headers")
 groups=("$_linuxprefix-extramodules")
-install="${_pkgname}.install"
 _commit=6e80bb1752280bcd142d86ecd0739661bd0e8312  # tags/tp-smapi/0.44
 source=("git+https://github.com/evgeni/tp_smapi#commit=$_commit")
 sha256sums=('SKIP')
@@ -50,7 +48,7 @@ build() {
 
 package() {
   # install kernel modules
-  find . -name "*.ko" -exec install -Dt "$pkgdir$_extramodules" {} +
+  find . -name "*.ko" -exec install -Dt "$pkgdir${_kernver}/extramodules" {} +
 
   # compress kernel modules
   find "$pkgdir" -name "*.ko" -exec strip {} +
@@ -61,5 +59,5 @@ package() {
   install -Dm 644 "../${_pkgname}.conf" "${pkgdir}/usr/lib/modules-load.d/${pkgname}.conf"
 
   # update kernel version in install file
-  sed -ri "s#^(extramodules=).*\$#\1${_extramodules}#" "${startdir}/${_pkgname}.install"
+  sed -ri "s#^(extramodules=).*\$#\1${_kernver}/extramodules#" "${startdir}/${_pkgname}.install"
 }
