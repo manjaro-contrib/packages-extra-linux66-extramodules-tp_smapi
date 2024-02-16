@@ -11,7 +11,6 @@
 # Contributor: Ignas Anikevicius <anikevicius ð gmail đ com>
 
 _linuxprefix=linux66
-_extraver=extramodules-6.6-MANJARO
 _pkgname=tp_smapi
 _kernver="$(cat /usr/src/${_linuxprefix}/version)"
 _extramodules=$(readlink -f "/usr/lib/modules/${_kernver}/extramodules")
