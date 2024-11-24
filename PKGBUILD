@@ -1,8 +1,6 @@
 # Maintainer: Philip Müller <philm[at]manjaro[dot]org>
 # Maintainer: Bernhard Landauer <bernhard@manjaro.org>
-
-# Arch credits:
-# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
+# Contributor: Lukas Fleischer <archlinux at cryptocrack dot de>
 # Contributor: xduugu
 # Contributor: nh2
 # Contributor: Steven Davidovitz <steviedizzle ð gmail đ com>
@@ -16,7 +14,7 @@ _linuxprefix=linux66
 _module=tp_smapi
 pkgname="${_linuxprefix}-${_module}"
 pkgver=0.44
-pkgrel=94
+pkgrel=95
 pkgdesc="Modules for ThinkPad's SMAPI functionality"
 arch=('x86_64')
 url='https://github.com/evgeni/tp_smapi'
@@ -24,10 +22,10 @@ license=('GPL')
 groups=("${_linuxprefix}-extramodules")
 depends=("${_linuxprefix}")
 makedepends=('git' "${_linuxprefix}-headers")
-provides=("${_module}=$pkgver")
+provides=("${_module}")
 _commit=6e80bb1752280bcd142d86ecd0739661bd0e8312  # tags/tp-smapi/0.44^0
 source=("git+https://github.com/evgeni/tp_smapi#commit=$_commit")
-sha256sums=('SKIP')
+sha256sums=('166892e1ac453f7284c1defbad0e89f67f09cae9859c2b0629a168c6a5060d53')
 
 pkgver() {
   cd "${_module}"
@@ -48,8 +46,7 @@ package() {
   _kernver="$(cat /usr/src/${_linuxprefix}/version)"
 
   find . -name "*.ko" -exec install -Dt "$pkgdir/usr/lib/modules/${_kernver}/extramodules" {} +
-  find "$pkgdir" -name "*.ko" -exec strip --strip-debug {} +
-  find "$pkgdir" -name "*.ko" -exec xz {} +
+  find "${pkgdir}" -name '*.ko' -exec zstd --rm -19 {} +
 
   # load module on startup
   echo tp_smapi | install -Dm644 /dev/stdin "$pkgdir/usr/lib/modules-load.d/$pkgname.conf"
