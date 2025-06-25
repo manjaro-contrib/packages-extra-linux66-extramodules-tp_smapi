@@ -46,7 +46,8 @@ package() {
   _kernver="$(cat /usr/src/${_linuxprefix}/version)"
 
   find . -name "*.ko" -exec install -Dt "$pkgdir/usr/lib/modules/${_kernver}/extramodules" {} +
-  find "${pkgdir}" -name '*.ko' -exec zstd --rm -19 {} +
+  find "$pkgdir" -name "*.ko" -exec strip --strip-debug {} +
+  find "$pkgdir" -name '*.ko' -exec zstd --rm -19 {} +
 
   # load module on startup
   echo tp_smapi | install -Dm644 /dev/stdin "$pkgdir/usr/lib/modules-load.d/$pkgname.conf"
