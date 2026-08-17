@@ -1,5 +1,5 @@
 # Maintainer: Philip Müller <philm[at]manjaro[dot]org>
-# Maintainer: Bernhard Landauer <bernhard@manjaro.org>
+# Contributor: Bernhard Landauer <bernhard@manjaro.org>
 # Contributor: Lukas Fleischer <archlinux at cryptocrack dot de>
 # Contributor: xduugu
 # Contributor: nh2
